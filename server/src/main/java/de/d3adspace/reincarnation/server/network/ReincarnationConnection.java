@@ -63,6 +63,8 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 	protected void channelRead0(ChannelHandlerContext channelHandlerContext, JSONObject jsonObject)
 		throws Exception {
 		
+		System.out.println(jsonObject);
+		
 		if (jsonObject == null || jsonObject.isNull("actionCode")) {
 			return;
 		}

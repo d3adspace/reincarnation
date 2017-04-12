@@ -16,8 +16,11 @@
  *
  */
 
-package de.d3adspace.reincarnation.client;
+package de.d3adspace.reincarnation.client.subscriber.handler;
 
-public class ReincarnationClient {
+import org.json.JSONObject;
+
+public interface SubscriptionHandler {
 	
+	void receivedMessage(JSONObject jsonObject);
 }

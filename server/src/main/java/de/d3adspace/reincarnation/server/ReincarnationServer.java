@@ -51,11 +51,7 @@ public class ReincarnationServer {
 	public ReincarnationServer(String serverHost, int serverPort) {
 		this.serverHost = serverHost;
 		this.serverPort = serverPort;
-		this.channelSubscriptions = new ConcurrentHashMap<String, List<ReincarnationConnection>>();
-	}
-	
-	public static void main(String[] args) {
-		new ReincarnationServer("127.0.0.1", 10000).startServer();
+		this.channelSubscriptions = new ConcurrentHashMap<>();
 	}
 	
 	public static Logger getLogger() {
@@ -109,13 +105,15 @@ public class ReincarnationServer {
 	
 	public void subscribe(String channelName, ReincarnationConnection connection) {
 		if (this.channelSubscriptions.containsKey(channelName)) {
-			this.channelSubscriptions.get(channelName).add(connection);
+			this.channelSubscriptions
+				.get(channelName)
+				.add(connection);
 		} else {
 			this.channelSubscriptions.put(channelName,
 				Collections.synchronizedList(Collections.singletonList(connection)));
 		}
 		
-		logger.info("received new subscripton on {0} by {1}", channelName,
+		logger.info("received new subscripton on {} by {}", channelName,
 			connection.getRemoteSocketAddress().toString());
 	}
 	
@@ -123,7 +121,7 @@ public class ReincarnationServer {
 		if (this.channelSubscriptions.containsKey(channelName)) {
 			this.channelSubscriptions.get(channelName).remove(connection);
 			
-			logger.info("received unsubscripton on {0} by {1}", channelName,
+			logger.info("received unsubscripton on {} by {}", channelName,
 				connection.getRemoteSocketAddress().toString());
 		}
 	}
