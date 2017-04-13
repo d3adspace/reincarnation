@@ -19,6 +19,7 @@
 package de.d3adspace.reincarnation.server.network;
 
 import de.d3adspace.reincarnation.commons.action.ReincarnationNetworkAction;
+import de.d3adspace.reincarnation.commons.netty.ReincarnationNettyChannelUtils;
 import de.d3adspace.reincarnation.server.ReincarnationServer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -56,6 +57,7 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 		logger.info("Connection opened: {0}", this.remoteSocketAddress.toString());
 	}
 	
+	@Override
 	protected void channelRead0(ChannelHandlerContext channelHandlerContext, JSONObject jsonObject)
 		throws Exception {
 		
@@ -101,6 +103,13 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 				break;
 			}
 		}
+	}
+	
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		ReincarnationNettyChannelUtils.closeWhenFlushed(ctx.channel());
+		
+		cause.printStackTrace();
 	}
 	
 	public SocketAddress getRemoteSocketAddress() {
