@@ -16,9 +16,9 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.publisher;
+package de.d3adspace.reincarnation.client.network.publisher;
 
-import de.d3adspace.reincarnation.client.client.ReincarnationClient;
+import de.d3adspace.reincarnation.client.network.client.ReincarnationClient;
 import de.d3adspace.reincarnation.commons.action.ReincarnationNetworkAction;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,7 +38,12 @@ public class ReincarnationPublisher extends ReincarnationClient {
 	
 	@Override
 	public void received(JSONObject jsonObject) {
+		// Nothing to do here
+	}
 	
+	@Override
+	protected void clientConnected() {
+		// We dont do that much
 	}
 	
 	public void disconnect() {
