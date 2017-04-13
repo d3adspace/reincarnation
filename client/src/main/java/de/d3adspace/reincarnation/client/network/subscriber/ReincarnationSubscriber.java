@@ -27,12 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import org.json.JSONObject;
 
 public class ReincarnationSubscriber extends ReincarnationNettyClient {
 	
 	private static AtomicInteger ID = new AtomicInteger(0);
-	private final List<SubscriptionHandler> subscriptionHandlers;
+	private List<SubscriptionHandler> subscriptionHandlers;
 	
 	public ReincarnationSubscriber(String host, int port) {
 		super(host, port, NameCreator.create("subscriber", ID.getAndIncrement()));
@@ -76,5 +77,19 @@ public class ReincarnationSubscriber extends ReincarnationNettyClient {
 			.put("channel", this.getChannel(handler.getClass()));
 		
 		super.write(jsonObject);
+	}
+	
+	public void unsubscribe(String channelName) {
+		if (channelName.isEmpty()) {
+			throw new IllegalArgumentException("channelName cannot be null");
+		}
+		
+		this.subscriptionHandlers = this.subscriptionHandlers.stream().filter(handler -> !Objects
+			.equals(this.getChannel(handler.getClass()), channelName)).collect(
+			Collectors.toList());
+		
+		final JSONObject jsonObject = new JSONObject()
+			.put("actionCode", ReincarnationNetworkAction.ACTION_UNREGISTER_CHANNEL.getActionCode())
+			.put("channel", channelName);
 	}
 }
