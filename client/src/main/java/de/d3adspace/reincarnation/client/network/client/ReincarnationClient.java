@@ -95,6 +95,10 @@ public abstract class ReincarnationClient extends SimpleChannelInboundHandler<JS
 	}
 	
 	protected void write(JSONObject jsonObject) {
+		if (jsonObject == null) {
+			throw new IllegalArgumentException("jsonObject cannot be null");
+		}
+		
 		this.channel.writeAndFlush(jsonObject);
 	}
 	
