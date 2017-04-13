@@ -24,8 +24,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
@@ -36,14 +34,12 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 	private final Channel channel;
 	private String subscriberName;
 	private SocketAddress remoteSocketAddress;
-	private List<String> channels;
 	
 	public ReincarnationConnection(
 		ReincarnationServer reincarnationServer, Channel channel) {
 		this.reincarnationServer = reincarnationServer;
 		this.channel = channel;
 		this.remoteSocketAddress = this.channel.remoteAddress();
-		this.channels = new ArrayList<>();
 	}
 	
 	public void sendObject(JSONObject jsonObject) {
@@ -74,26 +70,22 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 		
 		switch (action) {
 			case ACTION_BROADCAST: {
-				this.reincarnationServer.broadcast(jsonObject.getString("channel"), jsonObject);
+				this.reincarnationServer.getNetworkCommunicator()
+					.broadcast(jsonObject.getString("channel"), jsonObject);
 				break;
 			}
 			case ACTION_REGISTER_CHANNEL: {
 				final String channelName = jsonObject.getString("channel");
-				this.reincarnationServer.subscribe(channelName, this);
-				
-				this.channels.add(channelName);
+				this.reincarnationServer.getNetworkCommunicator().subscribe(channelName, this);
 				break;
 			}
 			case ACTION_UNREGISTER_CHANNEL: {
 				String channelName = jsonObject.getString("channel");
-				this.reincarnationServer.unsubscribe(channelName, this);
-				
-				this.channels.remove(channelName);
+				this.reincarnationServer.getNetworkCommunicator().unsubscribe(channelName, this);
 				break;
 			}
 			case ACTION_SET_NAME: {
 				this.subscriberName = jsonObject.getString("subscriberName");
-				
 				break;
 			}
 			case ACTION_UNKNOWN: {
