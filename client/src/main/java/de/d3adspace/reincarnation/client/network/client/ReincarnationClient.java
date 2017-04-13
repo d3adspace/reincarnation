@@ -16,9 +16,10 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.client;
+package de.d3adspace.reincarnation.client.network.client;
 
 import de.d3adspace.reincarnation.client.network.initializer.ReincarnationClientChannelInitializer;
+import de.d3adspace.reincarnation.commons.netty.ReincarnationNettyChannelUtils;
 import de.d3adspace.reincarnation.commons.netty.ReincarnationNettyUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -48,7 +49,9 @@ public abstract class ReincarnationClient extends SimpleChannelInboundHandler<JS
 		this.connect();
 	}
 	
-	public abstract void received(JSONObject jsonObject);
+	protected abstract void received(JSONObject jsonObject);
+	
+	protected abstract void clientConnected();
 	
 	private void connect() {
 		final EventLoopGroup workerGroup = ReincarnationNettyUtils.createEventLoopGroup(1);
@@ -72,11 +75,27 @@ public abstract class ReincarnationClient extends SimpleChannelInboundHandler<JS
 		this.received(jsonObject);
 	}
 	
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		this.clientConnected();
+	}
+	
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		ReincarnationNettyChannelUtils.closeWhenFlushed(ctx.channel());
+		
+		cause.printStackTrace();
+	}
+	
 	protected void write(JSONObject jsonObject) {
 		this.channel.writeAndFlush(jsonObject);
 	}
 	
 	protected void closeConnection() {
 		this.channel.close();
+	}
+	
+	public String getName() {
+		return name;
 	}
 }
