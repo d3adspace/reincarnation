@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public class ReincarnationNetworkCommunicator {
 				.add(connection);
 		} else {
 			this.sessions.put(channelName,
-				Collections.synchronizedList(Collections.singletonList(connection)));
+				new CopyOnWriteArrayList<>(Collections.singletonList(connection)));
 		}
 		
 		logger.info("received new subscripton on {} by {}", channelName,

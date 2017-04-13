@@ -70,7 +70,7 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 		
 		switch (action) {
 			case ACTION_BROADCAST: {
-				final String channelName = (String) jsonObject.remove("channel");
+				final String channelName = jsonObject.getString("channel");
 				
 				if (jsonObject.has("subscriberName")) {
 					final String subscriberName = (String) jsonObject.remove("subscriberName");
@@ -80,7 +80,7 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 				}
 				
 				this.reincarnationServer.getNetworkCommunicator()
-					.broadcast(jsonObject.getString(channelName), jsonObject);
+					.broadcast(channelName, jsonObject);
 				break;
 			}
 			case ACTION_REGISTER_CHANNEL: {
