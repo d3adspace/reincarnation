@@ -30,18 +30,18 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.json.JSONObject;
 
-public abstract class ReincarnationClient extends SimpleChannelInboundHandler<JSONObject> {
+public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandler<JSONObject> {
 	
 	private final String host;
 	private final int port;
 	private final String name;
 	private Channel channel;
 	
-	public ReincarnationClient(String host, int port) {
+	public ReincarnationNettyClient(String host, int port) {
 		this(host, port, "server");
 	}
 	
-	public ReincarnationClient(String host, int port, String name) {
+	public ReincarnationNettyClient(String host, int port, String name) {
 		if (host.isEmpty()) {
 			throw new IllegalArgumentException("host cannot be empty");
 		}

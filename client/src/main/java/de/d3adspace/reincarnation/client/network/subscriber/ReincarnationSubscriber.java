@@ -18,7 +18,7 @@
 
 package de.d3adspace.reincarnation.client.network.subscriber;
 
-import de.d3adspace.reincarnation.client.network.client.ReincarnationClient;
+import de.d3adspace.reincarnation.client.network.client.ReincarnationNettyClient;
 import de.d3adspace.reincarnation.client.network.subscriber.handler.SubscriptionHandler;
 import de.d3adspace.reincarnation.commons.action.ReincarnationNetworkAction;
 import de.d3adspace.reincarnation.commons.annotation.Channel;
@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.json.JSONObject;
 
-public class ReincarnationSubscriber extends ReincarnationClient {
+public class ReincarnationSubscriber extends ReincarnationNettyClient {
 	
 	private static AtomicInteger ID = new AtomicInteger(0);
 	private final List<SubscriptionHandler> subscriptionHandlers;

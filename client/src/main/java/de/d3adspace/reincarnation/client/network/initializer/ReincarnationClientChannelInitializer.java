@@ -18,7 +18,7 @@
 
 package de.d3adspace.reincarnation.client.network.initializer;
 
-import de.d3adspace.reincarnation.client.network.client.ReincarnationClient;
+import de.d3adspace.reincarnation.client.network.client.ReincarnationNettyClient;
 import de.d3adspace.reincarnation.commons.netty.ReincarnationNettyPipelineUtils;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -26,9 +26,9 @@ import io.netty.channel.ChannelInitializer;
 
 public class ReincarnationClientChannelInitializer extends ChannelInitializer<Channel> {
 	
-	private final ReincarnationClient reincarnationClient;
+	private final ReincarnationNettyClient reincarnationClient;
 	
-	public ReincarnationClientChannelInitializer(ReincarnationClient reincarnationClient) {
+	public ReincarnationClientChannelInitializer(ReincarnationNettyClient reincarnationClient) {
 		this.reincarnationClient = reincarnationClient;
 	}
 	

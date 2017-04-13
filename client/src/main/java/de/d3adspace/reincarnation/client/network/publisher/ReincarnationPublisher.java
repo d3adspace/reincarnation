@@ -18,13 +18,13 @@
 
 package de.d3adspace.reincarnation.client.network.publisher;
 
-import de.d3adspace.reincarnation.client.network.client.ReincarnationClient;
+import de.d3adspace.reincarnation.client.network.client.ReincarnationNettyClient;
 import de.d3adspace.reincarnation.commons.action.ReincarnationNetworkAction;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
 
-public class ReincarnationPublisher extends ReincarnationClient {
+public class ReincarnationPublisher extends ReincarnationNettyClient {
 	
 	private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable -> {
 		final Thread thread = Executors.defaultThreadFactory().newThread(runnable);
