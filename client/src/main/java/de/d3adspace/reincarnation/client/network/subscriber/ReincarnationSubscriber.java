@@ -91,5 +91,7 @@ public class ReincarnationSubscriber extends ReincarnationNettyClient {
 		final JSONObject jsonObject = new JSONObject()
 			.put("actionCode", ReincarnationNetworkAction.ACTION_UNREGISTER_CHANNEL.getActionCode())
 			.put("channel", channelName);
+		
+		super.write(jsonObject);
 	}
 }
