@@ -65,6 +65,10 @@ public class ReincarnationSubscriber extends ReincarnationClient {
 	}
 	
 	public void subscribe(SubscriptionHandler handler) {
+		if (handler == null) {
+			throw new IllegalArgumentException("handler cannot be null");
+		}
+		
 		this.subscriptionHandlers.add(handler);
 		
 		final JSONObject jsonObject = new JSONObject()
