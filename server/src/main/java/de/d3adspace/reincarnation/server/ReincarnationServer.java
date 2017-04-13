@@ -76,7 +76,7 @@ public class ReincarnationServer {
 			logger.error("Error occured while starting reincarnation netty server.", e);
 		}
 		
-		logger.info("reincarnation server successfully started, listening on {0}:{1}", serverHost,
+		logger.info("reincarnation server successfully started, listening on {}:{}", serverHost,
 			serverPort);
 	}
 	
