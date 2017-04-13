@@ -16,7 +16,7 @@
  *
  */
 
-import de.d3adspace.reincarnation.server.ReincarnationServer;
+package de.d3adspace.reincarnation.server;
 
 public class Main {
 	
