@@ -37,6 +37,14 @@ public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandl
 	private final String name;
 	private Channel channel;
 	
+	/**
+	 * Start a new Netty Client - use with caution or use existing {@link
+	 * de.d3adspace.reincarnation.client.network.publisher.ReincarnationPublisher} pr {@link
+	 * de.d3adspace.reincarnation.client.network.subscriber.ReincarnationSubscriber}
+	 *
+	 * @param host host of the server
+	 * @param port port of the server
+	 */
 	public ReincarnationNettyClient(String host, int port) {
 		this(host, port, "server");
 	}
@@ -56,10 +64,21 @@ public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandl
 		this.connect();
 	}
 	
+	/**
+	 * Called whenever the netty client received something in the right format of the pub sub impl
+	 *
+	 * @param jsonObject data received by the client
+	 */
 	protected abstract void received(JSONObject jsonObject);
 	
+	/**
+	 * Called when the client connected successfully
+	 */
 	protected abstract void clientConnected();
 	
+	/**
+	 * Connect to the server using host and port
+	 */
 	private void connect() {
 		final EventLoopGroup workerGroup = ReincarnationNettyUtils.createEventLoopGroup(1);
 		final Class<? extends Channel> channelClass = ReincarnationNettyUtils.getChannel();
@@ -94,6 +113,11 @@ public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandl
 		cause.printStackTrace();
 	}
 	
+	/**
+	 * write an jsonobject to the server and flush the channel
+	 *
+	 * @param jsonObject object to write
+	 */
 	protected void write(JSONObject jsonObject) {
 		if (jsonObject == null) {
 			throw new IllegalArgumentException("jsonObject cannot be null");
@@ -102,10 +126,18 @@ public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandl
 		this.channel.writeAndFlush(jsonObject);
 	}
 	
+	/**
+	 * closes netty channel
+	 */
 	protected void closeConnection() {
 		this.channel.close();
 	}
 	
+	/**
+	 * Get subscriber name in format subscriber-XXXX
+	 *
+	 * @return name
+	 */
 	public String getName() {
 		return name;
 	}
