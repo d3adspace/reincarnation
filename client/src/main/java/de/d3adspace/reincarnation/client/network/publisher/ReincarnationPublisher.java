@@ -52,6 +52,13 @@ public class ReincarnationPublisher extends ReincarnationClient {
 	}
 	
 	public void publish(String channel, JSONObject jsonObject) {
+		if (channel.isEmpty()) {
+			throw new IllegalArgumentException("channel cannot have an empty name");
+		}
+		if (jsonObject == null) {
+			throw new IllegalArgumentException("jsonObject cannot be null");
+		}
+		
 		jsonObject.put("actionCode", ReincarnationNetworkAction.ACTION_BROADCAST.getActionCode());
 		jsonObject.put("channel", channel);
 		
