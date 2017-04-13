@@ -51,8 +51,12 @@ public class ReincarnationPublisher extends ReincarnationNettyClient {
 		super.closeConnection();
 	}
 	
-	public void publish(String channel, JSONObject jsonObject) {
-		if (channel.isEmpty()) {
+	public void publish(String channelName, JSONObject jsonObject) {
+		this.publish(channelName, null, jsonObject);
+	}
+	
+	public void publish(String channelName, String subscriberName, JSONObject jsonObject) {
+		if (channelName.isEmpty()) {
 			throw new IllegalArgumentException("channel cannot have an empty name");
 		}
 		if (jsonObject == null) {
@@ -60,7 +64,11 @@ public class ReincarnationPublisher extends ReincarnationNettyClient {
 		}
 		
 		jsonObject.put("actionCode", ReincarnationNetworkAction.ACTION_BROADCAST.getActionCode());
-		jsonObject.put("channel", channel);
+		jsonObject.put("channel", channelName);
+		
+		if (subscriberName != null) {
+			jsonObject.put("subscriberName", subscriberName);
+		}
 		
 		this.executorService.execute(() -> super.write(jsonObject));
 	}
