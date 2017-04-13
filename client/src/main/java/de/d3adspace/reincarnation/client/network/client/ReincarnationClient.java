@@ -42,6 +42,13 @@ public abstract class ReincarnationClient extends SimpleChannelInboundHandler<JS
 	}
 	
 	public ReincarnationClient(String host, int port, String name) {
+		if (host.isEmpty()) {
+			throw new IllegalArgumentException("host cannot be empty");
+		}
+		if (name.isEmpty()) {
+			throw new IllegalArgumentException("name cannot be null");
+		}
+		
 		this.host = host;
 		this.port = port;
 		this.name = name;
