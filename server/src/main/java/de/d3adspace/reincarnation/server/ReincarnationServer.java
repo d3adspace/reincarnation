@@ -19,7 +19,7 @@
 package de.d3adspace.reincarnation.server;
 
 import de.d3adspace.reincarnation.commons.netty.ReincarnationNettyUtils;
-import de.d3adspace.reincarnation.server.network.ReincarnationConnection;
+import de.d3adspace.reincarnation.server.network.communication.ReincarnationNetworkCommunicator;
 import de.d3adspace.reincarnation.server.network.initializer.ReincarnationServerChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -28,11 +28,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.ServerChannel;
 import java.net.InetSocketAddress;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +36,7 @@ public class ReincarnationServer {
 	private static final Logger logger = LoggerFactory.getLogger(ReincarnationServer.class);
 	private final String serverHost;
 	private final int serverPort;
-	
-	private final Map<String, List<ReincarnationConnection>> channelSubscriptions;
-	
+	private final ReincarnationNetworkCommunicator networkCommunicator;
 	private EventLoopGroup bossGroup;
 	private EventLoopGroup workerGroup;
 	private Channel serverChannel;
@@ -51,7 +44,7 @@ public class ReincarnationServer {
 	public ReincarnationServer(String serverHost, int serverPort) {
 		this.serverHost = serverHost;
 		this.serverPort = serverPort;
-		this.channelSubscriptions = new ConcurrentHashMap<>();
+		this.networkCommunicator = new ReincarnationNetworkCommunicator(logger);
 	}
 	
 	public static Logger getLogger() {
@@ -96,33 +89,7 @@ public class ReincarnationServer {
 		this.workerGroup.shutdownGracefully();
 	}
 	
-	public void broadcast(String channel, final JSONObject jsonObject) {
-		if (this.channelSubscriptions.containsKey(channel)) {
-			this.channelSubscriptions.get(channel)
-				.forEach(connection -> connection.sendObject(jsonObject));
-		}
-	}
-	
-	public void subscribe(String channelName, ReincarnationConnection connection) {
-		if (this.channelSubscriptions.containsKey(channelName)) {
-			this.channelSubscriptions
-				.get(channelName)
-				.add(connection);
-		} else {
-			this.channelSubscriptions.put(channelName,
-				Collections.synchronizedList(Collections.singletonList(connection)));
-		}
-		
-		logger.info("received new subscripton on {} by {}", channelName,
-			connection.getRemoteSocketAddress().toString());
-	}
-	
-	public void unsubscribe(String channelName, ReincarnationConnection connection) {
-		if (this.channelSubscriptions.containsKey(channelName)) {
-			this.channelSubscriptions.get(channelName).remove(connection);
-			
-			logger.info("received unsubscripton on {} by {}", channelName,
-				connection.getRemoteSocketAddress().toString());
-		}
+	public ReincarnationNetworkCommunicator getNetworkCommunicator() {
+		return networkCommunicator;
 	}
 }
