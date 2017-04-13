@@ -16,10 +16,10 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.subscriber;
+package de.d3adspace.reincarnation.client.network.subscriber;
 
-import de.d3adspace.reincarnation.client.client.ReincarnationClient;
-import de.d3adspace.reincarnation.client.subscriber.handler.SubscriptionHandler;
+import de.d3adspace.reincarnation.client.network.client.ReincarnationClient;
+import de.d3adspace.reincarnation.client.network.subscriber.handler.SubscriptionHandler;
 import de.d3adspace.reincarnation.commons.action.ReincarnationNetworkAction;
 import de.d3adspace.reincarnation.commons.annotation.Channel;
 import de.d3adspace.reincarnation.commons.name.NameCreator;
@@ -51,6 +51,15 @@ public class ReincarnationSubscriber extends ReincarnationClient {
 		});
 	}
 	
+	@Override
+	protected void clientConnected() {
+		final JSONObject jsonObject = new JSONObject()
+			.put("actionCode", ReincarnationNetworkAction.ACTION_SET_NAME.getActionCode())
+			.put("subscriberName", this.getName());
+		
+		super.write(jsonObject);
+	}
+	
 	private String getChannel(Class<?> clazz) {
 		return clazz.getAnnotation(Channel.class).channelName();
 	}
@@ -62,6 +71,6 @@ public class ReincarnationSubscriber extends ReincarnationClient {
 			.put("actionCode", ReincarnationNetworkAction.ACTION_REGISTER_CHANNEL.getActionCode())
 			.put("channel", this.getChannel(handler.getClass()));
 		
-		write(jsonObject);
+		super.write(jsonObject);
 	}
 }
