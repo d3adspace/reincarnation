@@ -16,6 +16,7 @@
  *
  */
 
+import de.d3adspace.reincarnation.client.network.ReincarnationPubSubClient;
 import de.d3adspace.reincarnation.client.network.publisher.ReincarnationPublisher;
 import de.d3adspace.reincarnation.client.network.subscriber.ReincarnationSubscriber;
 import de.d3adspace.reincarnation.client.network.subscriber.handler.SubscriptionHandler;
@@ -23,13 +24,11 @@ import de.d3adspace.reincarnation.commons.annotation.Channel;
 import org.json.JSONObject;
 
 public class Main {
-	
 	public static void main(String[] args) {
-		final ReincarnationPublisher publisher = new ReincarnationPublisher("127.0.0.1", 10000);
-		final ReincarnationSubscriber subscriber = new ReincarnationSubscriber("127.0.0.1", 10000);
+		final ReincarnationPubSubClient pubSubClient = new ReincarnationPubSubClient("localhost", 10000);
 		
-		subscriber.subscribe(new CustomHandler());
-		subscriber.subscribe(new CustomHandler1());
+		pubSubClient.subscribe(new CustomHandler());
+		pubSubClient.subscribe(new CustomHandler1());
 		
 		try {
 			Thread.sleep(3000L);
@@ -37,7 +36,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		publisher.publish("idioten2", new JSONObject().put("text", "HEY!"));
+		pubSubClient.publish("idioten2", new JSONObject().put("text", "HEY!"));
 	}
 	
 	@Channel(channelName = "idioten")
