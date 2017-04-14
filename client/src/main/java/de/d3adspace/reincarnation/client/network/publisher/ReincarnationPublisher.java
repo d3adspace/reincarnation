@@ -20,11 +20,18 @@ package de.d3adspace.reincarnation.client.network.publisher;
 
 import de.d3adspace.reincarnation.client.network.client.ReincarnationNettyClient;
 import de.d3adspace.reincarnation.commons.action.ReincarnationNetworkAction;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import org.json.JSONObject;
 
 public class ReincarnationPublisher extends ReincarnationNettyClient {
+	
+	private final AtomicInteger CALLBACK_ID = new AtomicInteger(0);
+	private final Map<Integer, Consumer<JSONObject>> callbacks;
 	
 	private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable -> {
 		final Thread thread = Executors.defaultThreadFactory().newThread(runnable);
@@ -34,11 +41,25 @@ public class ReincarnationPublisher extends ReincarnationNettyClient {
 	
 	public ReincarnationPublisher(String host, int port) {
 		super(host, port);
+		
+		this.callbacks = new ConcurrentHashMap<>();
 	}
 	
 	@Override
 	public void received(JSONObject jsonObject) {
-		// Nothing to do here
+		if (this.callbacks.isEmpty()) {
+			return;
+		}
+		if (!jsonObject.has("callbackId")) {
+			return;
+		}
+		
+		final int callbackId = Integer
+			.valueOf(((String) jsonObject.remove("callbackId")).split("|")[1]);
+		if (this.callbacks.containsKey(callbackId)) {
+			final Consumer<JSONObject> consumer = this.callbacks.get(callbackId);
+			consumer.accept(jsonObject);
+		}
 	}
 	
 	@Override
@@ -71,5 +92,11 @@ public class ReincarnationPublisher extends ReincarnationNettyClient {
 		}
 		
 		this.executorService.execute(() -> super.write(jsonObject));
+	}
+	
+	public void request(String channelName, JSONObject request, Consumer<JSONObject> consumer) {
+		final String callbackId = this.getName() + ";" + this.CALLBACK_ID.getAndIncrement();
+		
+		request.put("actionCode", ReincarnationNetworkAction.ACTION_UNKNOWN.getActionCode());
 	}
 }
