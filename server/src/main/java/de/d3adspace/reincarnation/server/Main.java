@@ -18,9 +18,35 @@
 
 package de.d3adspace.reincarnation.server;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 public class Main {
 	
 	public static void main(String[] args) {
-		new ReincarnationServer("127.0.0.1", 10000).startServer();
+		String host = "localhost";
+		int port = 10000;
+		
+		if (args.length > 0) {
+			final Options options = new Options();
+			options.addOption("h", true, "host address to bind the server on");
+			options.addOption("p", true, "port to bind the server on");
+			
+			CommandLineParser parser = new DefaultParser();
+			try {
+				CommandLine commandLine = parser.parse(options, args);
+				
+				host = commandLine.hasOption("h") ? commandLine.getOptionValue("h") : "localhost";
+				port = commandLine.hasOption("p") ? Integer
+					.parseInt(commandLine.getOptionValue("p")) : 10000;
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		new ReincarnationServer(host, port).startServer();
 	}
 }
