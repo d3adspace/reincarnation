@@ -95,8 +95,14 @@ public class ReincarnationPublisher extends ReincarnationNettyClient {
 	}
 	
 	public void request(String channelName, JSONObject request, Consumer<JSONObject> consumer) {
-		final String callbackId = this.getName() + ";" + this.CALLBACK_ID.getAndIncrement();
+		final int callbackIdReal = this.CALLBACK_ID.getAndIncrement();
+		final String callbackId = this.getName() + ";" + callbackIdReal;
+		this.callbacks.put(callbackIdReal, consumer);
 		
 		request.put("actionCode", ReincarnationNetworkAction.ACTION_UNKNOWN.getActionCode());
+		request.put("channel", channelName);
+		request.put("callbackid", callbackId);
+		
+		write(request);
 	}
 }
