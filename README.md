@@ -33,7 +33,7 @@ class App {
 			}
 		}
 		
-		@Channel(channelName = "idioten2")
+		@Channel(channelName = "example2")
 		private static class CustomHandler1 implements SubscriptionHandler {
 			
 			@Override
