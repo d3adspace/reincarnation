@@ -94,4 +94,10 @@ public class ReincarnationSubscriber extends ReincarnationNettyClient {
 		
 		super.write(jsonObject);
 	}
+	
+	public void disconnect() {
+		this.subscriptionHandlers.forEach(subscriptionHandler -> this
+			.unsubscribe(this.getChannel(subscriptionHandler.getClass())));
+		super.closeConnection();
+	}
 }
