@@ -19,14 +19,14 @@ class App {
   			    e.printStackTrace();
   		  }
   		  
-  		  pubSubClient.publish("idioten2", new JSONObject().put("text", "HEY!"));
+  		  pubSubClient.publish("example2", new JSONObject().put("text", "HEY!"));
   	}
   	
-  	@Channel(channelName = "idioten")
+  	@Channel(channelName = "example")
   	private static class CustomHandler implements SubscriptionHandler {
   		  @Override
   		  public void receivedMessage(JSONObject jsonObject) {
-  			    System.out.println("HAB NEN PUBLISH IN IDIOTEN: " + jsonObject.toString());
+  			    System.out.println("Publish in example" + jsonObject.toString());
   		  }
   	}
   	
@@ -34,7 +34,7 @@ class App {
   	private static class CustomHandler1 implements SubscriptionHandler {
 		    @Override
   		  public void receivedMessage(JSONObject jsonObject) {
-  			    System.out.println("HAB NEN PUBLISH IN IDIOTEN2: " + jsonObject.toString());
+  			    System.out.println("Publish in example2" + jsonObject.toString());
   		  }
   	}
 }
