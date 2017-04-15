@@ -6,40 +6,22 @@ java -jar reincarnation-server-1.2.0-SNAPSHOT.jar -h <host> -p <port>
 ````
 
 ```java
-class App {
+public class Main {
+	public static void main(String[] args) {
+		final PubSubClient pubSubClient = ReincarnationPubSubClientFactory.createPubSubClient("localhost", 10000);
 		
-		public static void main(String[] args) {
-			final ReincarnationPubSubClient pubSubClient = new ReincarnationPubSubClient(
-				"localhost", 10000);
-			
-			pubSubClient.subscribe(new CustomHandler());
-			pubSubClient.subscribe(new CustomHandler1());
-			
-			try {
-				Thread.sleep(3000L);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			pubSubClient.publish("example2", new JSONObject().put("text", "HEY!"));
-		}
+		pubSubClient.subscribe(new CustomHandler());
 		
-		@Channel(channelName = "example")
-		private static class CustomHandler implements SubscriptionHandler {
-			
-			@Override
-			public void receivedMessage(JSONObject jsonObject) {
-				System.out.println("Publish in example" + jsonObject.toString());
-			}
-		}
+		pubSubClient.publish("example", new JSONObject().put("text", "test!"));
+	}
+	
+	@SubscriptionChannel(channelName = "example")
+	private static class CustomHandler implements ReincarnationSubscriptionHandler {
 		
-		@Channel(channelName = "example2")
-		private static class CustomHandler1 implements SubscriptionHandler {
-			
-			@Override
-			public void receivedMessage(JSONObject jsonObject) {
-				System.out.println("Publish in example2" + jsonObject.toString());
-			}
+		@Override
+		public void onMessage(JSONObject jsonObject) {
+			System.out.println("Publish in example: " + jsonObject.toString());
 		}
 	}
+}
 ```
