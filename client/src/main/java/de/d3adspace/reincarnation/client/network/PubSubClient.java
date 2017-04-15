@@ -16,11 +16,16 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.network.subscriber.handler;
+package de.d3adspace.reincarnation.client.network;
 
+import de.d3adspace.reincarnation.client.network.client.handler.ReincarnationSubscriptionHandler;
 import org.json.JSONObject;
 
-public interface SubscriptionHandler {
+public interface PubSubClient {
 	
-	void receivedMessage(JSONObject jsonObject);
+	void publish(String channelName, JSONObject jsonObject);
+	
+	void subscribe(ReincarnationSubscriptionHandler subscriptionHandler);
+	
+	boolean hasSubscribed(String channelName);
 }

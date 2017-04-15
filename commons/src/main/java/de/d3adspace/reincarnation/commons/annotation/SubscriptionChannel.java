@@ -16,35 +16,13 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.network.initializer;
+package de.d3adspace.reincarnation.commons.annotation;
 
-import de.d3adspace.reincarnation.commons.netty.ReincarnationNettyPipelineUtils;
-import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelInitializer;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-@Sharable
-public class ReincarnationClientChannelInitializer extends ChannelInitializer<Channel> {
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SubscriptionChannel {
 	
-	private final ChannelHandler channelHandler;
-	
-	public ReincarnationClientChannelInitializer(ChannelHandler channelHandler) {
-		this.channelHandler = channelHandler;
-	}
-	
-	@Override
-	protected void initChannel(Channel channel) throws Exception {
-		channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
-		
-		channel.pipeline().addLast(
-			ReincarnationNettyPipelineUtils
-				.createLengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4),
-			ReincarnationNettyPipelineUtils.createJSONDecoder(),
-			ReincarnationNettyPipelineUtils.createLengthFieldPrepender(4),
-			ReincarnationNettyPipelineUtils.createJSONEncoder(),
-			channelHandler
-		);
-	}
+	String channelName();
 }

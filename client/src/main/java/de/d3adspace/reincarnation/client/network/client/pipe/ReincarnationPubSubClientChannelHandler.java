@@ -16,38 +16,35 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.network;
+package de.d3adspace.reincarnation.client.network.client.pipe;
 
-import de.d3adspace.reincarnation.client.network.publisher.ReincarnationPublisher;
-import de.d3adspace.reincarnation.client.network.subscriber.ReincarnationSubscriber;
-import de.d3adspace.reincarnation.client.network.subscriber.handler.SubscriptionHandler;
-import java.util.function.Consumer;
+import de.d3adspace.reincarnation.client.network.client.impl.ReincarnationPubSubClient;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import java.io.IOException;
 import org.json.JSONObject;
 
-public class ReincarnationPubSubClient {
+public class ReincarnationPubSubClientChannelHandler extends
+	SimpleChannelInboundHandler<JSONObject> {
 	
-	private final ReincarnationSubscriber subscriber;
-	private final ReincarnationPublisher publisher;
+	private final ReincarnationPubSubClient reincarnationPubSubClient;
 	
-	public ReincarnationPubSubClient(String host, int port) {
-		this.subscriber = new ReincarnationSubscriber(host, port);
-		this.publisher = new ReincarnationPublisher(host, port);
+	public ReincarnationPubSubClientChannelHandler(
+		ReincarnationPubSubClient reincarnationPubSubClient) {
+		this.reincarnationPubSubClient = reincarnationPubSubClient;
 	}
 	
-	public void publish(String channelName, JSONObject jsonObject) {
-		this.publisher.publish(channelName, jsonObject);
+	@Override
+	protected void channelRead0(ChannelHandlerContext channelHandlerContext, JSONObject jsonObject)
+		throws Exception {
+		
+		this.reincarnationPubSubClient.received(jsonObject);
 	}
 	
-	public void subscribe(SubscriptionHandler subscriptionHandler) {
-		this.subscriber.subscribe(subscriptionHandler);
-	}
-	
-	public void request(String channelName, JSONObject request, Consumer<JSONObject> consumer) {
-		this.publisher.request(channelName, request, consumer);
-	}
-	
-	public void disconnect() {
-		this.publisher.disconnect();
-		this.subscriber.disconnect();
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		if (!(cause instanceof IOException)) {
+			cause.printStackTrace();
+		}
 	}
 }

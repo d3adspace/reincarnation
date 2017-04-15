@@ -16,13 +16,14 @@
  *
  */
 
-package de.d3adspace.reincarnation.commons.annotation;
+package de.d3adspace.reincarnation.client.network.client;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import de.d3adspace.reincarnation.client.network.PubSubClient;
+import de.d3adspace.reincarnation.client.network.client.impl.ReincarnationPubSubClient;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Channel {
+public class ReincarnationPubSubClientFactory {
 	
-	String channelName();
+	public static PubSubClient createPubSubClient(String host, int port) {
+		return new ReincarnationPubSubClient(host, port);
+	}
 }
