@@ -24,6 +24,7 @@ import de.d3adspace.reincarnation.server.ReincarnationServer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import java.io.IOException;
 import java.net.SocketAddress;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -96,7 +97,9 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		ReincarnationNettyChannelUtils.closeWhenFlushed(ctx.channel());
 		
-		cause.printStackTrace();
+		if (!(cause instanceof IOException)) {
+			cause.printStackTrace();
+		}
 	}
 	
 	public SocketAddress getRemoteSocketAddress() {

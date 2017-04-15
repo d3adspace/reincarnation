@@ -28,6 +28,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.SimpleChannelInboundHandler;
+import java.io.IOException;
 import org.json.JSONObject;
 
 public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandler<JSONObject> {
@@ -101,7 +102,9 @@ public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandl
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		ReincarnationNettyChannelUtils.closeWhenFlushed(ctx.channel());
 		
-		cause.printStackTrace();
+		if (!(cause instanceof IOException)) {
+			cause.printStackTrace();
+		}
 	}
 	
 	/**
