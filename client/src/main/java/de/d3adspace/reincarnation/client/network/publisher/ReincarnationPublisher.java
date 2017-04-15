@@ -54,8 +54,7 @@ public class ReincarnationPublisher extends ReincarnationNettyClient {
 			return;
 		}
 		
-		final int callbackId = Integer
-			.valueOf(((String) jsonObject.remove("callbackId")).split("|")[1]);
+		final int callbackId = (int) jsonObject.remove("callbackId");
 		if (this.callbacks.containsKey(callbackId)) {
 			final Consumer<JSONObject> consumer = this.callbacks.get(callbackId);
 			consumer.accept(jsonObject);
@@ -73,10 +72,6 @@ public class ReincarnationPublisher extends ReincarnationNettyClient {
 	}
 	
 	public void publish(String channelName, JSONObject jsonObject) {
-		this.publish(channelName, null, jsonObject);
-	}
-	
-	public void publish(String channelName, String subscriberName, JSONObject jsonObject) {
 		if (channelName.isEmpty()) {
 			throw new IllegalArgumentException("channel cannot have an empty name");
 		}
@@ -87,17 +82,12 @@ public class ReincarnationPublisher extends ReincarnationNettyClient {
 		jsonObject.put("actionCode", ReincarnationNetworkAction.ACTION_BROADCAST.getActionCode());
 		jsonObject.put("channel", channelName);
 		
-		if (subscriberName != null) {
-			jsonObject.put("subscriberName", subscriberName);
-		}
-		
 		this.executorService.execute(() -> super.write(jsonObject));
 	}
 	
 	public void request(String channelName, JSONObject request, Consumer<JSONObject> consumer) {
-		final int callbackIdReal = this.CALLBACK_ID.getAndIncrement();
-		final String callbackId = this.getName() + ";" + callbackIdReal;
-		this.callbacks.put(callbackIdReal, consumer);
+		final int callbackId = this.CALLBACK_ID.getAndIncrement();
+		this.callbacks.put(callbackId, consumer);
 		
 		request.put("actionCode", ReincarnationNetworkAction.ACTION_UNKNOWN.getActionCode());
 		request.put("channel", channelName);

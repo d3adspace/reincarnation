@@ -22,10 +22,8 @@ import de.d3adspace.reincarnation.server.network.ReincarnationConnection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
@@ -43,18 +41,6 @@ public class ReincarnationNetworkCommunicator {
 		if (this.sessions.containsKey(channel)) {
 			this.sessions.get(channel)
 				.forEach(connection -> connection.sendObject(jsonObject));
-		}
-	}
-	
-	public void broadcastToSubscriber(String channelName, String subscriberName,
-		JSONObject jsonObject) {
-		if (this.sessions.containsKey(channelName)) {
-			for (ReincarnationConnection connection : this.sessions.get(channelName).stream()
-				.filter(connection -> Objects
-					.equals(connection.getSubscriberName(), subscriberName))
-				.collect(Collectors.toList())) {
-				connection.sendObject(jsonObject);
-			}
 		}
 	}
 	

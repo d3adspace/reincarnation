@@ -33,7 +33,6 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 	private static final Logger logger = ReincarnationServer.getLogger();
 	private final ReincarnationServer reincarnationServer;
 	private final Channel channel;
-	private String subscriberName;
 	private SocketAddress remoteSocketAddress;
 	
 	public ReincarnationConnection(
@@ -71,14 +70,6 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 		switch (action) {
 			case ACTION_BROADCAST: {
 				final String channelName = jsonObject.getString("channel");
-				
-				if (jsonObject.has("subscriberName")) {
-					final String subscriberName = (String) jsonObject.remove("subscriberName");
-					this.reincarnationServer.getNetworkCommunicator()
-						.broadcastToSubscriber(channelName, subscriberName, jsonObject);
-					break;
-				}
-				
 				this.reincarnationServer.getNetworkCommunicator()
 					.broadcast(channelName, jsonObject);
 				break;
@@ -91,10 +82,6 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 			case ACTION_UNREGISTER_CHANNEL: {
 				String channelName = jsonObject.getString("channel");
 				this.reincarnationServer.getNetworkCommunicator().unsubscribe(channelName, this);
-				break;
-			}
-			case ACTION_SET_NAME: {
-				this.subscriberName = jsonObject.getString("subscriberName");
 				break;
 			}
 			case ACTION_UNKNOWN: {
@@ -114,9 +101,5 @@ public class ReincarnationConnection extends SimpleChannelInboundHandler<JSONObj
 	
 	public SocketAddress getRemoteSocketAddress() {
 		return remoteSocketAddress;
-	}
-	
-	public String getSubscriberName() {
-		return subscriberName;
 	}
 }

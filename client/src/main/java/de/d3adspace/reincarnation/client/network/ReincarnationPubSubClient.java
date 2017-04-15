@@ -38,10 +38,6 @@ public class ReincarnationPubSubClient {
 		this.publisher.publish(channelName, jsonObject);
 	}
 	
-	public void publish(String channelName, String subscriberName, JSONObject jsonObject) {
-		this.publisher.publish(channelName, subscriberName, jsonObject);
-	}
-	
 	public void subscribe(SubscriptionHandler subscriptionHandler) {
 		this.subscriber.subscribe(subscriptionHandler);
 	}

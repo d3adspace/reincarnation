@@ -23,7 +23,6 @@ public enum ReincarnationNetworkAction {
 	ACTION_UNKNOWN(-1),
 	ACTION_REGISTER_CHANNEL(1),
 	ACTION_UNREGISTER_CHANNEL(2),
-	ACTION_SET_NAME(3),
 	ACTION_REQUEST(4);
 	
 	private final int actionCode;

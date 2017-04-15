@@ -22,21 +22,17 @@ import de.d3adspace.reincarnation.client.network.client.ReincarnationNettyClient
 import de.d3adspace.reincarnation.client.network.subscriber.handler.SubscriptionHandler;
 import de.d3adspace.reincarnation.commons.action.ReincarnationNetworkAction;
 import de.d3adspace.reincarnation.commons.annotation.Channel;
-import de.d3adspace.reincarnation.commons.name.NameCreator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import org.json.JSONObject;
 
 public class ReincarnationSubscriber extends ReincarnationNettyClient {
-	
-	private static AtomicInteger ID = new AtomicInteger(0);
 	private List<SubscriptionHandler> subscriptionHandlers;
 	
 	public ReincarnationSubscriber(String host, int port) {
-		super(host, port, NameCreator.create("subscriber", ID.getAndIncrement()));
+		super(host, port);
 		this.subscriptionHandlers = new ArrayList<>();
 	}
 	
@@ -54,11 +50,7 @@ public class ReincarnationSubscriber extends ReincarnationNettyClient {
 	
 	@Override
 	protected void clientConnected() {
-		final JSONObject jsonObject = new JSONObject()
-			.put("actionCode", ReincarnationNetworkAction.ACTION_SET_NAME.getActionCode())
-			.put("subscriberName", this.getName());
-		
-		super.write(jsonObject);
+	
 	}
 	
 	private String getChannel(Class<?> clazz) {

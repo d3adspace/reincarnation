@@ -34,7 +34,6 @@ public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandl
 	
 	private final String host;
 	private final int port;
-	private final String name;
 	private Channel channel;
 	
 	/**
@@ -46,20 +45,12 @@ public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandl
 	 * @param port port of the server
 	 */
 	public ReincarnationNettyClient(String host, int port) {
-		this(host, port, "server");
-	}
-	
-	public ReincarnationNettyClient(String host, int port, String name) {
 		if (host.isEmpty()) {
 			throw new IllegalArgumentException("host cannot be empty");
-		}
-		if (name.isEmpty()) {
-			throw new IllegalArgumentException("name cannot be null");
 		}
 		
 		this.host = host;
 		this.port = port;
-		this.name = name;
 		
 		this.connect();
 	}
@@ -131,14 +122,5 @@ public abstract class ReincarnationNettyClient extends SimpleChannelInboundHandl
 	 */
 	protected void closeConnection() {
 		this.channel.close();
-	}
-	
-	/**
-	 * Get subscriber name in format subscriber-XXXX
-	 *
-	 * @return name
-	 */
-	public String getName() {
-		return name;
 	}
 }
