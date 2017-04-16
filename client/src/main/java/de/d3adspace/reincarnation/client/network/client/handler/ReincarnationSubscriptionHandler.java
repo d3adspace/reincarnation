@@ -22,5 +22,11 @@ import org.json.JSONObject;
 
 public interface ReincarnationSubscriptionHandler {
 	
+	/**
+	 * Called whenever the client received a response from the server. Remember to annotate the
+	 * class with {@link de.d3adspace.reincarnation.commons.annotation.SubscriptionChannel}
+	 *
+	 * @param jsonObject The object received by the server.
+	 */
 	void onMessage(JSONObject jsonObject);
 }

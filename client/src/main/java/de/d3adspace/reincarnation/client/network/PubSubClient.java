@@ -23,9 +23,39 @@ import org.json.JSONObject;
 
 public interface PubSubClient {
 	
+	/**
+	 * You can publish the given jsonObject to the given channel.
+	 *
+	 * @param channelName The name of the channel to publish to.
+	 * @param jsonObject The JSONObject to publish.
+	 */
 	void publish(String channelName, JSONObject jsonObject);
 	
+	/**
+	 * Subscribe to the given channel by implementing the {@link ReincarnationSubscriptionHandler} and giving it a channel
+	 * using {@link de.d3adspace.reincarnation.commons.annotation.SubscriptionChannel}.
+	 *
+	 * @param subscriptionHandler The Handler to handle the received objects.
+	 */
 	void subscribe(ReincarnationSubscriptionHandler subscriptionHandler);
 	
+	/**
+	 * Unsubscribe the given channel by removing all handlers.
+	 *
+	 * @param channelName The name of the channel to unsubscribe.
+	 */
+	void unsubscribe(String channelName);
+	
+	/**
+	 * Ask whether you have subscribed a given channel.
+	 *
+	 * @param channelName The name of the channel.
+	 * @return Whether there is a subscription for that channel.
+	 */
 	boolean hasSubscribed(String channelName);
+	
+	/**
+	 * Disconnect from the server. Will remove all subscriptions and shutdown the client.
+	 */
+	void disconnect();
 }

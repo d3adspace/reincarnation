@@ -46,6 +46,12 @@ public class ReincarnationPubSubClient implements PubSubClient {
 	private final Map<String, List<ReincarnationSubscriptionHandler>> handlers;
 	private Channel channel;
 	
+	/**
+	 * Basic Constructor that will setup the client and will connect to the given server.
+	 *
+	 * @param host The host to connect to.
+	 * @param port The port to connect to.
+	 */
 	public ReincarnationPubSubClient(String host, int port) {
 		this.host = host;
 		this.port = port;
@@ -59,6 +65,9 @@ public class ReincarnationPubSubClient implements PubSubClient {
 		this.connectToServer();
 	}
 	
+	/**
+	 * Connecting to server using the former in constructor given address.
+	 */
 	private void connectToServer() {
 		final EventLoopGroup workerGroup = ReincarnationNettyUtils.createEventLoopGroup(1);
 		final Class<? extends Channel> channelClass = ReincarnationNettyUtils.getChannel();
@@ -103,8 +112,31 @@ public class ReincarnationPubSubClient implements PubSubClient {
 	}
 	
 	@Override
+	public void unsubscribe(String channelName) {
+		if (!this.handlers.containsKey(channelName)) {
+			return;
+		}
+		
+		this.handlers.remove(channelName);
+		
+		final JSONObject jsonObject = new JSONObject()
+			.put("actionCode", ReincarnationNetworkAction.ACTION_UNREGISTER_CHANNEL.getActionCode())
+			.put("channel", channelName);
+		
+		this.write(jsonObject);
+	}
+	
+	@Override
 	public boolean hasSubscribed(String channelName) {
 		return this.handlers.containsKey(channelName);
+	}
+	
+	@Override
+	public void disconnect() {
+		this.handlers.keySet().forEach(this::unsubscribe);
+		
+		this.channel.close();
+		this.executorService.shutdown();
 	}
 	
 	public void received(JSONObject jsonObject) {
