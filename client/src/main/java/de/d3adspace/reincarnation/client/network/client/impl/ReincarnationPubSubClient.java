@@ -127,6 +127,19 @@ public class ReincarnationPubSubClient implements PubSubClient {
 	}
 	
 	@Override
+	public void unsubscribe(ReincarnationSubscriptionHandler handler) {
+		final String channelName = this.getChannelNameFromHandler(handler);
+		
+		if (this.handlers.containsKey(channelName)) {
+			this.handlers.get(channelName).remove(handler);
+		}
+		
+		if (this.handlers.get(channelName).isEmpty()) {
+			this.unsubscribe(channelName);
+		}
+	}
+	
+	@Override
 	public boolean hasSubscribed(String channelName) {
 		return this.handlers.containsKey(channelName);
 	}

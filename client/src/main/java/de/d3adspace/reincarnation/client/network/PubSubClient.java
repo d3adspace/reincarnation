@@ -47,6 +47,13 @@ public interface PubSubClient {
 	void unsubscribe(String channelName);
 	
 	/**
+	 * Unsubscribe a single handler, not the whole channel.
+	 *
+	 * @param handler The handler to unregister.
+	 */
+	void unsubscribe(ReincarnationSubscriptionHandler handler);
+	
+	/**
 	 * Ask whether you have subscribed a given channel.
 	 *
 	 * @param channelName The name of the channel.
