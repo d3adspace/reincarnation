@@ -18,6 +18,7 @@
 
 package de.d3adspace.reincarnation.client.network;
 
+import de.d3adspace.reincarnation.client.PubSubClient;
 import de.d3adspace.reincarnation.client.network.impl.ReincarnationPubSubClient;
 
 public class ReincarnationPubSubClientFactory {

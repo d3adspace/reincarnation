@@ -16,7 +16,7 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.network;
+package de.d3adspace.reincarnation.client;
 
 import de.d3adspace.reincarnation.client.network.handler.ReincarnationSubscriptionHandler;
 import org.json.JSONObject;

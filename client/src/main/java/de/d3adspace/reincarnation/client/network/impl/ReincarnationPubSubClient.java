@@ -18,7 +18,7 @@
 
 package de.d3adspace.reincarnation.client.network.impl;
 
-import de.d3adspace.reincarnation.client.network.PubSubClient;
+import de.d3adspace.reincarnation.client.PubSubClient;
 import de.d3adspace.reincarnation.client.network.handler.ReincarnationSubscriptionHandler;
 import de.d3adspace.reincarnation.client.network.initializer.ReincarnationClientChannelInitializer;
 import de.d3adspace.reincarnation.client.network.pipe.ReincarnationPubSubClientChannelHandler;

@@ -25,9 +25,9 @@ java -jar reincarnation-server-1.2.0-SNAPSHOT.jar -h <host> -p <port>
  */
 
 
-import de.d3adspace.reincarnation.client.network.PubSubClient;
-import de.d3adspace.reincarnation.client.network.ReincarnationPubSubClientFactory;
-import de.d3adspace.reincarnation.client.network.handler.ReincarnationSubscriptionHandler;
+import PubSubClient;
+import ReincarnationPubSubClientFactory;
+import ReincarnationSubscriptionHandler;
 import de.d3adspace.reincarnation.commons.annotation.SubscriptionChannel;
 import org.json.JSONObject;
 
