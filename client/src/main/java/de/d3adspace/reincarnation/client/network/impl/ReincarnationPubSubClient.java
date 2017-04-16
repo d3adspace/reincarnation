@@ -16,12 +16,12 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.network.client.impl;
+package de.d3adspace.reincarnation.client.network.impl;
 
 import de.d3adspace.reincarnation.client.network.PubSubClient;
-import de.d3adspace.reincarnation.client.network.client.handler.ReincarnationSubscriptionHandler;
-import de.d3adspace.reincarnation.client.network.client.pipe.ReincarnationPubSubClientChannelHandler;
+import de.d3adspace.reincarnation.client.network.handler.ReincarnationSubscriptionHandler;
 import de.d3adspace.reincarnation.client.network.initializer.ReincarnationClientChannelInitializer;
+import de.d3adspace.reincarnation.client.network.pipe.ReincarnationPubSubClientChannelHandler;
 import de.d3adspace.reincarnation.commons.action.ReincarnationNetworkAction;
 import de.d3adspace.reincarnation.commons.annotation.SubscriptionChannel;
 import de.d3adspace.reincarnation.commons.netty.ReincarnationNettyUtils;

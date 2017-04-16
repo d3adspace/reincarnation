@@ -18,7 +18,7 @@
 
 package de.d3adspace.reincarnation.client.network;
 
-import de.d3adspace.reincarnation.client.network.client.handler.ReincarnationSubscriptionHandler;
+import de.d3adspace.reincarnation.client.network.handler.ReincarnationSubscriptionHandler;
 import org.json.JSONObject;
 
 public interface PubSubClient {

@@ -16,35 +16,13 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.network.client.pipe;
+package de.d3adspace.reincarnation.client.network;
 
-import de.d3adspace.reincarnation.client.network.client.impl.ReincarnationPubSubClient;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import java.io.IOException;
-import org.json.JSONObject;
+import de.d3adspace.reincarnation.client.network.impl.ReincarnationPubSubClient;
 
-public class ReincarnationPubSubClientChannelHandler extends
-	SimpleChannelInboundHandler<JSONObject> {
+public class ReincarnationPubSubClientFactory {
 	
-	private final ReincarnationPubSubClient reincarnationPubSubClient;
-	
-	public ReincarnationPubSubClientChannelHandler(
-		ReincarnationPubSubClient reincarnationPubSubClient) {
-		this.reincarnationPubSubClient = reincarnationPubSubClient;
-	}
-	
-	@Override
-	protected void channelRead0(ChannelHandlerContext channelHandlerContext, JSONObject jsonObject)
-		throws Exception {
-		
-		this.reincarnationPubSubClient.received(jsonObject);
-	}
-	
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if (!(cause instanceof IOException)) {
-			cause.printStackTrace();
-		}
+	public static PubSubClient createPubSubClient(String host, int port) {
+		return new ReincarnationPubSubClient(host, port);
 	}
 }

@@ -16,14 +16,17 @@
  *
  */
 
-package de.d3adspace.reincarnation.client.network.client;
+package de.d3adspace.reincarnation.client.network.handler;
 
-import de.d3adspace.reincarnation.client.network.PubSubClient;
-import de.d3adspace.reincarnation.client.network.client.impl.ReincarnationPubSubClient;
+import org.json.JSONObject;
 
-public class ReincarnationPubSubClientFactory {
+public interface ReincarnationSubscriptionHandler {
 	
-	public static PubSubClient createPubSubClient(String host, int port) {
-		return new ReincarnationPubSubClient(host, port);
-	}
+	/**
+	 * Called whenever the client received a response from the server. Remember to annotate the
+	 * class with {@link de.d3adspace.reincarnation.commons.annotation.SubscriptionChannel}
+	 *
+	 * @param jsonObject The object received by the server.
+	 */
+	void onMessage(JSONObject jsonObject);
 }
