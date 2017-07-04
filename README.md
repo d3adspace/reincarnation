@@ -1,5 +1,7 @@
 # Reincarnation
 
+We dont recommend to use this software anymore. Look at the reworked version at: https://github.com/D3adspaceEnterprises/heimdall
+
 Usage: 
 ````bash
 java -jar reincarnation-server-1.2.0-SNAPSHOT.jar -h <host> -p <port>
